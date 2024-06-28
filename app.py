@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, send_file
 import requests
 import os
+from urllib.parse import quote as url_quote
 
 app = Flask(__name__)
 
@@ -13,7 +14,7 @@ def download():
     admn = request.form['admn']
     resp = requests.post("https://parent.iitism.ac.in/index.php/parent_portal/grade_sheet/print_grade_report/0/B.TECH",
                          data={"admn_no": admn})
-    file_path = f'gradesheet{admn}.pdf'
+    file_path = f'gradesheet{url_quote(admn)}.pdf'
     with open(file_path, 'wb') as f:
         f.write(resp.content)
     return send_file(file_path, as_attachment=True)
